@@ -1,6 +1,7 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let gameover = false
+let pontuacao = 0
 
 addEventListener('keydown', (e) => {
     if (e.key === 'd') {
@@ -28,7 +29,6 @@ document.addEventListener("click", (e) => {
 
 class Entidade {
     #gravidade
-    #pontuacao
     constructor(x, y, largura, altura, cor) {
         this.x = x
         this.y = y
@@ -36,7 +36,6 @@ class Entidade {
         this.altura = altura
         this.cor = cor
         this.#gravidade = 3
-        this.#pontuacao = 0
     }
     desenhar = function () {
         ctx.fillStyle = this.cor
@@ -55,6 +54,7 @@ class Personagem extends Entidade {
         this.#velocidadeX = 5
         this.andando = false
         this.direcao = 0
+
     }
     getvelocidadeX = function () {
         return this.#velocidadeX
@@ -133,6 +133,8 @@ class Quadrado extends Entidade{
             bola.y + bola.altura >= this.y
         ) {
             this.x = 100000000000000
+            pontuacao += 1
+            console.log("pontos: " + pontuacao)
             if(!bola.caindo){
                 bola.caindo = !bola.caindo
             }else{
@@ -141,6 +143,12 @@ class Quadrado extends Entidade{
         }
     }
 
+}
+
+function mostraPontos(){
+    ctx.fillStyle='white'
+    ctx.font='20px Arial'
+    ctx.fillText(`Pontuação: ${pontuacao}`, 20,20)
 }
 
 
@@ -181,6 +189,7 @@ function loop() {
         quad.desenhar()
         quad.verificaColisao()
     });
+    mostraPontos()
     gameOver()
 
 
