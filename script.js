@@ -20,16 +20,21 @@ addEventListener('keyup', (e) => {
 
 
 class Entidade{
+    #gravidade
     constructor(x,y, largura, altura, cor){
         this.x = x
         this.y = y
         this.largura = largura
         this.altura = altura
         this.cor = cor
+        this.#gravidade = 3
     }   
     desenhar = function(){
         ctx.fillStyle = this.cor
         ctx.fillRect(this.x, this.y, this.largura, this.altura);
+    }
+    getGravidade = function (){
+        return this.#gravidade
     }
 }
 
@@ -59,13 +64,43 @@ class Personagem extends Entidade{
     }
 }
 
-let personagem = new Personagem(canvas.width-240, canvas.height-50, 75, 25,'blue')
+class Bola extends Entidade{
+    constructor(x,y,largura,altura,cor){
+        super(x,y,altura,largura,cor)
+        this.caindo = true
+        this.subindo = false
+    }
+    Caindo = function(){
+        if(this.caindo){
+            let i = this.getGravidade()
+            this.y += i
+        }else {
+            let i = this.getGravidade() * -1
+            this.y += i
+        }
+    }
+    verificaColisao = function(){
+        if(this.x <= personagem.x + personagem.largura &&
+            this.x + this.largura >= personagem.x &&
+            this.y <= personagem.y + personagem.altura &&
+            this.y + this.altura >= personagem.y
+        ){
+            this.caindo = false
+        }
+    }
 
+}
+
+let personagem = new Personagem(canvas.width-240, canvas.height-50, 75, 25,'blue')
+let bola = new Bola(canvas.width-210, canvas.height-350, 10,10,'white')
 function loop(){
     ctx.clearRect(0,0,canvas.width,canvas.height)
     personagem.desenhar()
     personagem.andar()
     personagem.verificaColisao()
+    bola.desenhar()
+    bola.Caindo()
+    bola.verificaColisao()
     
 
     requestAnimationFrame(loop)
