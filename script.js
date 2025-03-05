@@ -2,7 +2,9 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let gameover = false
 let pontuacao = 0
-
+let random = Math.random() > 0.5 
+/*Eu ia tentar fazer a bola  começar indo 
+para uma direção aleatória mas a aula vai acabar em 5 minutos*/
 addEventListener('keydown', (e) => {
     if (e.key === 'd') {
         personagem.andando = true;
@@ -35,7 +37,7 @@ class Entidade {
         this.largura = largura
         this.altura = altura
         this.cor = cor
-        this.#gravidade = 3
+        this.#gravidade = 7
     }
     desenhar = function () {
         ctx.fillStyle = this.cor
@@ -51,7 +53,7 @@ class Personagem extends Entidade {
     #velocidadeX
     constructor(x, y, largura, altura, cor) {
         super(x, y, largura, altura, cor)
-        this.#velocidadeX = 5
+        this.#velocidadeX = 8
         this.andando = false
         this.direcao = 0
 
@@ -132,6 +134,7 @@ class Quadrado extends Entidade{
             bola.y <= this.y + this.altura &&
             bola.y + bola.altura >= this.y
         ) {
+            
             this.x = 100000000000000
             pontuacao += 1
             console.log("pontos: " + pontuacao)
@@ -159,22 +162,29 @@ function gameOver(){
         ctx.fillStyle='black'
         ctx.font='50px Arial'
         ctx.fillText("Game Over", (canvas.width/2)-120,(canvas.height/2))
+    }else if(!gameover && pontuacao == 100){
+        ctx.fillStyle='yellow'
+        ctx.fillRect((canvas.width/2)-150,(canvas.height/2)-50,310,80)
+        ctx.fillStyle='black'
+        ctx.font='50px Arial'
+        ctx.fillText("Vitória!", (canvas.width/2)-120,(canvas.height/2))
     }
 }
 
 let personagem = new Personagem(canvas.width - 240, canvas.height - 50, 75, 25, 'blue')
 let bola = new Bola(canvas.width - 210, canvas.height - 350, 10, 10, 'white')
 let quad = new Quadrado(canvas.width - 210, 200, 20, 30, 'green')
+let quadrados = [], espacoVert = 15, linhas = 10, colunas = 10;
 
-let quadrados = []
-for (let i = 0; i < 10; i++) {
-    let x = 5 + i * 40;
-    let y = 200
-    let largura = 10
-    let altura = 30
-    let cor = 'green'
-
-    quadrados.push(new Quadrado(x, y, largura, altura, cor))
+for (let linha = 0; linha < linhas; linha++) {
+    for (let coluna = 0; coluna < colunas; coluna++) {
+        let x = 5 + coluna * 40;
+        let y = 200 - linha * espacoVert;
+        let largura = 10;
+        let altura = 30;
+        let cor = 'green';
+        quadrados.push(new Quadrado(x, y, largura, altura, cor));
+    }
 }
 
 function loop() {
@@ -189,6 +199,7 @@ function loop() {
         quad.desenhar()
         quad.verificaColisao()
     });
+
     mostraPontos()
     gameOver()
 
