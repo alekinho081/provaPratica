@@ -190,7 +190,6 @@ let personagem = new Personagem(canvas.width - 240, canvas.height - 50, 75, 15, 
 let bola = new Bola(canvas.width - 210, canvas.height - 350, 10, 10, 'white', random)
 let quad = new Quadrado(canvas.width - 210, 200, 20, 30, 'green')
 let quadrados = [], espacoVert = 35, linhas = 6, colunas = 10;
-
 for (let linha = 0; linha < linhas; linha++) {
     for (let coluna = 0; coluna < colunas; coluna++) {
         let x = 5 + coluna * 40;
