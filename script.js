@@ -141,7 +141,7 @@ class Quadrado extends Entidade{
             bola.y + bola.altura >= this.y
         ) {
             
-            this.x = 100000000000000
+            this.x = 10000000000000
             pontuacao += 1
             console.log("pontos: " + pontuacao)
             if(!bola.caindo){
