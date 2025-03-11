@@ -2,10 +2,11 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let gameover = false
 let pontuacao = 0
+//Random para decidir para qual direção a bola começará andando
 let random = Math.random() > 0.5 
 let vitoria = false
-/*Eu ia tentar fazer a bola  começar indo 
-para uma direção aleatória mas a aula vai acabar em 5 minutos*/
+let pontuMAX = localStorage.getItem('pontuMax')
+
 addEventListener('keydown', (e) => {
     if (e.key === 'd') {
         personagem.andando = true;
@@ -24,6 +25,10 @@ addEventListener('keyup', (e) => {
 
 document.addEventListener("click", (e) => {
     if(gameover==true || vitoria==true){
+        if(pontuacao >= pontuMAX){
+            localStorage.setItem('pontuMax', pontuacao)
+        }
+        
         location.reload()
     }
 })
@@ -136,7 +141,7 @@ class Quadrado extends Entidade{
             bola.y + bola.altura >= this.y
         ) {
             
-            this.x = 100000000000000
+            this.x = 10000000000000
             pontuacao += 1
             console.log("pontos: " + pontuacao)
             if(!bola.caindo){
@@ -150,9 +155,17 @@ class Quadrado extends Entidade{
 }
 
 function mostraPontos(){
+    
+  
+
+
     ctx.fillStyle='white'
     ctx.font='20px Arial'
     ctx.fillText(`Pontuação: ${pontuacao}`, 20,20)
+
+    ctx.fillStyle='white'
+    ctx.font='20px Arial'
+    ctx.fillText(`Pontuação Máxima: ${pontuMAX}`, 200,20)
 }
 
 
